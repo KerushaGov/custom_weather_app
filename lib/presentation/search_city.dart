@@ -34,7 +34,7 @@ class SearchPage extends StatelessWidget {
                       ),
                       validator: (String? value) {
                         if (value == null || value.trim() == '') {
-                          return 'Please enter your name fdffrs';
+                          return 'Please enter your name';
                         }
                         return null;
                       },
