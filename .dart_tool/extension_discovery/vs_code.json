@@ -1,0 +1,1 @@
+{"version":2,"entries":[{"package":"open_meteo_api","rootUri":"../packages/open_meteo_api/","packageUri":"lib/"},{"package":"weather_repository","rootUri":"../packages/weather_repository/","packageUri":"lib/"},{"package":"custom_weather_app","rootUri":"../","packageUri":"lib/"}]}
