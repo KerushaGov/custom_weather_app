@@ -1,60 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_repository/weather_repository.dart';
 
-class SearchPage extends StatelessWidget {
-  SearchPage({super.key});
+class SearchPage extends StatefulWidget {
+  const SearchPage({super.key});
 
-  //final TextEditingController _textController = TextEditingController();
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            //Navigator.of(context).pop();
-          },
-        ),
-        title: const Text('Search City'),
-      ),
-      body: Stack(
-        children: [
-          _WeatherBackground(),
-          Form(
-            key: _formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: 'Enter your name',
-                      ),
-                      validator: (String? value) {
-                        if (value == null || value.trim() == '') {
-                          return 'Please enter your name';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                  ),
-                ],
-              ),
+    return BlocConsumer<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
             ),
+            title: const Text('Search City'),
           ),
-        ],
-      ),
+          body: Stack(
+            children: [
+              _WeatherBackground(),
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            hintText: 'Enter your name',
+                          ),
+                          onChanged: (String? value) =>
+                              context.read<WeatherBloc>().add(
+                                    WeatherEvent.onSearchChanged(
+                                        input: value ?? ''),
+                                  ),
+                          validator: (String? value) {
+                            if (value == null || value.trim() == '') {
+                              return 'Please enter your name';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            context
+                                .read<WeatherBloc>()
+                                .add(const WeatherEvent.searchCity());
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
